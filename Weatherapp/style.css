@@ -1,22 +1,110 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background-image: url("../assets/geio-tischler-FHGjgz9QNJM-unsplash.jpg");
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(to bottom, #b2fefa, #a1c4fd, #c2e9fb);
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
 }
 
 h2 {
-  text-align: center;
   font-size: 35px;
-  margin-top: 15px;
+  margin: 15px 0;
+  color: #4c4b4b;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .card {
-  width: 300px;
-  height: 400px;
-  background: rgb(250, 249, 249);
-  border-radius: 10px;
-  
+  background: linear-gradient(to bottom, #ffffff, #e3f9e5);
+  border-radius: 20px;
+  color: #37474f;
+  padding: 40px;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.input {
+  padding: 15px 70px 15px 15px;
+  width: 90%;
+  border-radius: 30px;
+  border: 1px solid #cfd8dc;
+  margin: 30px 0;
+}
+
+.fa-search {
+  cursor: pointer;
+  margin-left: -35px;
+  color: #37474f;
+}
+
+.cloud {
+  font-size: 80px;
+  color: #607d8b;
+  margin-bottom: 20px;
+}
+
+.flexed {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.temperature {
+  font-size: 50px;
+  color: #37474f;
+  margin-bottom: 10px;
+}
+
+.location {
+  font-size: 30px;
+  color: #607d8b;
+}
+
+.wind-speed {
+  font-size: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #37474f;
+}
+
+.wind-speed i {
+  font-size: 35px;
+  margin-bottom: 5px;
+}
+
+@media (max-width: 600px) {
+  .card {
+    width: 95%;
+    padding: 30px;
+  }
+
+  .temperature {
+    font-size: 40px;
+  }
+
+  .location {
+    font-size: 22px;
+  }
+
+  .input {
+    width: 90%;
+  }
 }

@@ -9,26 +9,40 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
-</head>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css"
+    />
+    <link
+      rel="icon"
+      href="../assets/noaa-5hZJVGPG6vo-unsplash.jpg"
+      type="image/x-icon"
+    />
   </head>
   <body>
+    <h2>Weather APP</h2>
     <div>
-      <nav></nav>
-      <div>
-        <h2>Weather</h2>
-      </div>
       <div class="card">
-        <div></div>
-        <div class="notification">Notify</div>
-        <i class="wi wi-day-sunny"></i> <!-- Sun Icon -->
-        <i class="wi wi-day-rainy"></i> <!-- Sun Icon -->
-        <i class="wi wi-night-clear"></i> <!-- Clear Night Icon -->
-        <div class="weather-container">
-          <div class="weather-icon"></div>
-          <div class="temperature-value"></div>
-          <div class="temperature-description"></div>
-          <div class="location"></div>
+        <div>
+          <input placeholder="Enter city name" class="input" />
+          <i class="fas fa-search"></i>
+        </div>
+        <div class="flexed">
+          <i class="fas fa-cloud-showers-heavy cloud"></i>
+          <div>
+            <p class="temperature">22°c</p>
+            <p class="location">New York</p>
+          </div>
+          <div class="wind-speed">
+            <i class="wi wi-strong-wind"></i>
+            <span class="wind-speed">15 km/h</span>
+            <p>Wind Speed</p>
+          </div>
         </div>
       </div>
     </div>
