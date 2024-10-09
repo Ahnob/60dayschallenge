@@ -1,22 +1,34 @@
 const apiKey = "34db34fa92b36d620b597e7764f4d098";
-const apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=berlin`;
+const apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=london`;
 
 async function checkWeather() {
-  const response = await fetch(apiUrl + `&appid=${apiKey}`);
+  try {
+    const response = await fetch(apiUrl + `&appid=${apiKey}`);
 
-  if (!response.ok) {
-    console.error("HTTP error", response.status);
-    return;
+    if (!response.ok) {
+      console.error("HTTP error", response.status);
+      return; // Stop if there's an error
+    }
+
+    const data = await response.json();
+    console.log(data); // Log the data for debugging
+
+    // Update HTML elements with weather data
+    document.querySelector(".location").innerHTML = data.name; // Set location
+    document.querySelector(".temp").innerHTML =
+      Math.round(data.main.temp) + "°C"; // Set temperature
+    document.querySelector(
+      ".wind-speed.windd"
+    ).innerHTML = `${data.wind.speed} km/h`; // Set wind speed
+    document.querySelector(
+      ".humidity-value"
+    ).innerHTML = `${data.main.humidity}%`; // Set humidity
+  } catch (error) {
+    console.error("Error fetching weather data:", error); // Catch any other errors
   }
-
-  const data = await response.json();
-  console.log(data);
-
-  // Use the correct class selectors
-  document.querySelector(".location").innerHTML = data.name; // This is correct
-  document.querySelector(".temp").innerHTML = data.main.temp + " °C"; // Change here
-  document.querySelector("windd").innerHTML = data.windd.speed;
-  +" km/h"; // Change here
 }
 
-checkWeather();
+// Ensure the DOM is fully loaded before running the function
+document.addEventListener("DOMContentLoaded", () => {
+  checkWeather();
+});
