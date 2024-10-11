@@ -1,9 +1,12 @@
 const apiKey = "34db34fa92b36d620b597e7764f4d098";
-const apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=london`;
+const searchBox = document.querySelector(".search input");
+const searchBtn = document.querySelector() ;
 
-async function checkWeather() {
+const apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=`;
+
+async function checkWeather(city) {
   try {
-    const response = await fetch(apiUrl + `&appid=${apiKey}`);
+    const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
 
     if (!response.ok) {
       console.error("HTTP error", response.status);
