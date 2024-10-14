@@ -1,6 +1,6 @@
 const apiKey = "34db34fa92b36d620b597e7764f4d098";
 const searchBox = document.querySelector(".search input");
-const searchBtn = document.querySelector() ;
+const searchBtn = document.querySelector(".search-btn");
 
 const apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=`;
 
@@ -10,27 +10,29 @@ async function checkWeather(city) {
 
     if (!response.ok) {
       console.error("HTTP error", response.status);
-      return; // Stop if there's an error
+      return;
     }
 
     const data = await response.json();
-    console.log(data); // Log the data for debugging
+    console.log(data);
 
-    // Update HTML elements with weather data
     document.querySelector(".location").innerHTML = data.name; // Set location
     document.querySelector(".temp").innerHTML =
-      Math.round(data.main.temp) + "°C"; // Set temperature
+      Math.round(data.main.temp) + "°C";
     document.querySelector(
       ".wind-speed.windd"
-    ).innerHTML = `${data.wind.speed} km/h`; // Set wind speed
+    ).innerHTML = `${data.wind.speed} km/h`;
     document.querySelector(
       ".humidity-value"
-    ).innerHTML = `${data.main.humidity}%`; // Set humidity
+    ).innerHTML = `${data.main.humidity}%`;
   } catch (error) {
-    console.error("Error fetching weather data:", error); // Catch any other errors
+    console.error("Error fetching weather data:", error);
   }
 }
 
+searchBtn.addEventListener("click", () => {
+  checkWeather(searchBox.value);
+});
 // Ensure the DOM is fully loaded before running the function
 document.addEventListener("DOMContentLoaded", () => {
   checkWeather();
