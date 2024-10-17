@@ -96,7 +96,14 @@ h2 {
   font-size: 80px;
 }
 
-/* Simple cloud animation */
+.description {
+    font-size: 1.5rem;
+    font-weight: 600; 
+    color: #4a90e2; 
+    text-align: center; 
+    margin: 10px 0;
+    letter-spacing: 1px; 
+  }
 @keyframes float {
   0% {
     transform: translatey(0px);
@@ -142,7 +149,7 @@ h2 {
 .wind-speed i,
 .humidity i {
   font-size: 35px;
-  margin-right: 5px; /* Space between icon and text */
+  margin-right: 5px; 
 }
 
 /* Responsive styling for smaller screens */

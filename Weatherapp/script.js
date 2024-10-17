@@ -1,19 +1,27 @@
 const apiKey = "34db34fa92b36d620b597e7764f4d098";
 const searchBox = document.querySelector(".search input");
 const searchBtn = document.querySelector(".search-btn");
+const loading = document.querySelector(".loading");
+const errorMessage = document.querySelector(".error-message");
 
 const apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=`;
 
 async function checkWeather(city) {
   try {
+    // Show loading spinner and hide error message
+    loading.style.display = "block";
+    errorMessage.style.display = "none";
+
     const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
     if (!response.ok) {
-      console.error("HTTP error", response.status);
-      return;
+      throw new Error("City not found");
     }
 
     const data = await response.json();
     console.log(data); // Log the full response to verify
+
+    // Hide loading spinner
+    loading.style.display = "none";
 
     // Update the city and country
     document.querySelector(
@@ -23,6 +31,10 @@ async function checkWeather(city) {
     // Update the temperature
     document.querySelector(".temp").innerHTML =
       Math.round(data.main.temp) + "°C";
+
+    // Update the weather description
+    document.querySelector(".description").innerHTML =
+      data.weather[0].description;
 
     // Update the wind speed
     document.querySelector(".windd").innerHTML = `${data.wind.speed} km/h`;
@@ -36,6 +48,8 @@ async function checkWeather(city) {
     updateWeatherIcon(data.weather[0].icon);
   } catch (error) {
     console.error("Error fetching weather data:", error);
+    errorMessage.style.display = "block";
+    loading.style.display = "none";
   }
 }
 
@@ -72,6 +86,13 @@ function updateWeatherIcon(weatherIconCode) {
 // Event listener for search button click
 searchBtn.addEventListener("click", () => {
   checkWeather(searchBox.value);
+});
+
+// Allow user to press Enter to search
+searchBox.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    checkWeather(searchBox.value);
+  }
 });
 
 // Load default weather for 'London' on page load

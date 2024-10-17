@@ -32,10 +32,14 @@
           <i class="fas fa-search search-btn"></i>
         </div>
 
+        <!-- Loading Spinner -->
+        <div class="loading" style="display: none">Loading...</div>
+
         <div class="flexed">
           <i class="weather-icon wi"></i>
           <div class="temp">28°C</div>
           <div class="location">London, GB</div>
+          <div class="description">Clear sky</div>
           <div class="wind-speed">
             <i class="fas fa-wind"></i>
             <span class="windd">15 km/h</span>
@@ -44,6 +48,11 @@
             <i class="wi wi-humidity"></i>
             <span class="humidity-value">50%</span>
           </div>
+        </div>
+
+        <!-- Error message -->
+        <div class="error-message" style="display: none; color: red">
+          City not found. Please try again.
         </div>
       </div>
     </div>
