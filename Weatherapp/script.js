@@ -3,12 +3,27 @@ const searchBox = document.querySelector(".search input");
 const searchBtn = document.querySelector(".search-btn");
 const loading = document.querySelector(".loading");
 const errorMessage = document.querySelector(".error-message");
+const timeDisplay = document.querySelector(".time");
 
 const apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=`;
 
+// Function to get the current date and time
+function getCurrentDayAndTime() {
+  const now = new Date();
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  return now.toLocaleDateString(undefined, options);
+}
+
+// Function to display the weather and time
 async function checkWeather(city) {
   try {
-    // Show loading spinner and hide error message
     loading.style.display = "block";
     errorMessage.style.display = "none";
 
@@ -18,61 +33,52 @@ async function checkWeather(city) {
     }
 
     const data = await response.json();
-    console.log(data); // Log the full response to verify
+    console.log("Weather data:", data);
 
-    // Hide loading spinner
     loading.style.display = "none";
 
-    // Update the city and country
     document.querySelector(
       ".location"
     ).innerHTML = `${data.name}, ${data.sys.country}`;
-
-    // Update the temperature
     document.querySelector(".temp").innerHTML =
       Math.round(data.main.temp) + "°C";
-
-    // Update the weather description
     document.querySelector(".description").innerHTML =
       data.weather[0].description;
-
-    // Update the wind speed
     document.querySelector(".windd").innerHTML = `${data.wind.speed} km/h`;
-
-    // Update the humidity
     document.querySelector(
       ".humidity-value"
     ).innerHTML = `${data.main.humidity}%`;
 
-    // Update the weather icon dynamically
     updateWeatherIcon(data.weather[0].icon);
+    timeDisplay.innerHTML = getCurrentDayAndTime();
   } catch (error) {
     console.error("Error fetching weather data:", error);
     errorMessage.style.display = "block";
+    errorMessage.innerHTML = error.message;
+  } finally {
     loading.style.display = "none";
   }
 }
 
-// Function to update the weather icon dynamically
+// Update weather icon
 function updateWeatherIcon(weatherIconCode) {
   const iconElement = document.querySelector(".weather-icon");
 
-  // Mapping OpenWeather icon codes to Weather Icons classes
   const iconMapping = {
-    "01d": "wi-day-sunny", // Clear sky (day)
-    "01n": "wi-night-clear", // Clear sky (night)
-    "02d": "wi-day-cloudy", // Few clouds (day)
-    "02n": "wi-night-alt-cloudy", // Few clouds (night)
-    "03d": "wi-cloud", // Scattered clouds
+    "01d": "wi-day-sunny",
+    "01n": "wi-night-clear",
+    "02d": "wi-day-cloudy",
+    "02n": "wi-night-alt-cloudy",
+    "03d": "wi-cloud",
     "03n": "wi-cloud",
-    "04d": "wi-cloudy", // Broken clouds
+    "04d": "wi-cloudy",
     "04n": "wi-cloudy",
-    "09d": "wi-showers", // Shower rain (day)
+    "09d": "wi-showers",
     "09n": "wi-showers",
-    "10d": "wi-day-rain", // Rain (day)
-    "10n": "wi-night-alt-rain", // Rain (night)
-    "11d": "wi-thunderstorm", // Thunderstorm (day)
-    "11n": "wi-thunderstorm", // Thunderstorm (night)
+    "10d": "wi-day-rain",
+    "10n": "wi-night-alt-rain",
+    "11d": "wi-thunderstorm",
+    "11n": "wi-thunderstorm",
     "13d": "wi-snow",
     "13n": "wi-snow",
     "50d": "wi-fog",
@@ -81,6 +87,77 @@ function updateWeatherIcon(weatherIconCode) {
 
   const weatherClass = iconMapping[weatherIconCode] || "wi-na";
   iconElement.className = `weather-icon wi ${weatherClass}`;
+}
+
+// Get user's current location weather
+function getUserLocationWeather() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        console.log("User Latitude:", lat);
+        console.log("User Longitude:", lon);
+
+        const apiGeoUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
+
+        try {
+          loading.style.display = "block";
+          errorMessage.style.display = "none";
+
+          const response = await fetch(apiGeoUrl);
+          if (!response.ok) {
+            throw new Error("Could not fetch weather data for your location");
+          }
+
+          const data = await response.json();
+          console.log("Location weather data:", data);
+
+          loading.style.display = "none";
+
+          // Check if location name is available
+          const locationName = data.name
+            ? `${data.name}, ${data.sys.country}`
+            : "Location not available";
+
+          // Display weather data
+          document.querySelector(".location").innerHTML = locationName;
+          document.querySelector(".temp").innerHTML =
+            Math.round(data.main.temp) + "°C";
+          document.querySelector(".description").innerHTML =
+            data.weather[0].description;
+          document.querySelector(
+            ".windd"
+          ).innerHTML = `${data.wind.speed} km/h`;
+          document.querySelector(
+            ".humidity-value"
+          ).innerHTML = `${data.main.humidity}%`;
+
+          updateWeatherIcon(data.weather[0].icon);
+
+          // Update the current date and time
+          timeDisplay.innerHTML = getCurrentDayAndTime();
+        } catch (error) {
+          console.error(
+            "Error fetching weather data for your location:",
+            error
+          );
+          errorMessage.style.display = "block";
+          errorMessage.innerHTML = error.message;
+        } finally {
+          loading.style.display = "none";
+        }
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        errorMessage.innerHTML = "Unable to fetch your location.";
+        errorMessage.style.display = "block";
+      }
+    );
+  } else {
+    errorMessage.innerHTML = "Geolocation is not supported by this browser.";
+    errorMessage.style.display = "block";
+  }
 }
 
 // Event listener for search button click
@@ -95,7 +172,7 @@ searchBox.addEventListener("keypress", (e) => {
   }
 });
 
-// Load default weather for 'London' on page load
+// Load weather for user's location on page load
 document.addEventListener("DOMContentLoaded", () => {
-  checkWeather("London");
+  getUserLocationWeather();
 });
